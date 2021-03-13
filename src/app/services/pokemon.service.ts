@@ -10,8 +10,10 @@ export class PokemonService {
   arrayBuffer: any;
   file: File;
   private tmsList;
+  private tmNames;
   private pokemonToTmList;
   pokemonsExcelLoaded = new Subject<any>();
+  tmNamesEvaluated = new Subject<any>();
 
   constructor() {
     this.loadTmExcel();
@@ -49,6 +51,12 @@ export class PokemonService {
 
   loadRows(raws: any[]): void {
     this.tmsList = {};
+    this.tmNames = {};
+    for (const tm of Object.keys(raws[0])) {
+      this.tmNames[tm] = raws[0][tm];
+    }
+    this.tmNamesEvaluated.next(this.tmNames);
+
     raws.forEach((raw, index) => {
       if (index === 0) { return; } // TM names
       const tms: string[] = Object.keys(raw);
@@ -84,5 +92,9 @@ export class PokemonService {
 
   public getTmDataByPokemon(cb): any {
     return this.pokemonsExcelLoaded.subscribe(cb);
+  }
+
+  public getTmNames(cb): any {
+    return this.tmNamesEvaluated.subscribe(cb);
   }
 }

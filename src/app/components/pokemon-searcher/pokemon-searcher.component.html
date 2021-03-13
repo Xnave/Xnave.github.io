@@ -1,4 +1,22 @@
 <p>The Great TM Searcher </p>
-<input placeholder="enter pokemon name" name="pokemonName" [(ngModel)]="pokemonName">
-<button (click)="updatePokemonDetails(pokemonName)">search</button>
-<br><label>{{ pokemonTMDetails }}</label>
+<div style="display: flex; min-width: 400px">
+  <form>
+    <mat-form-field class="example-full-width">
+      <mat-label>Pokemon</mat-label>
+      <input type="text" placeholder="enter pokemon name" name="pokemonName"
+             [(ngModel)]="pokemonSelected" matInput [matAutocomplete]="auto">
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let pokemonName of pokemonNames" [value]="pokemonName">
+          {{pokemonName}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </form>
+  <button mat-mini-fab color="primary" (click)="updatePokemonDetails(pokemonSelected || '')">
+    <mat-icon>search</mat-icon>
+  </button>
+</div>
+
+<span *ngFor="let tmDetails of pokemonTMs">
+  <br><label style="margin: 10px 0 10px 10px">{{ tmDetails }}</label>
+</span>
