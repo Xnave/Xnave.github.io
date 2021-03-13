@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {PokemonService} from '../../services/pokemon.service';
 import {FormControl} from '@angular/forms';
+import {map, startWith} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-searcher',
@@ -13,6 +15,8 @@ export class PokemonSearcherComponent implements OnInit {
   pokemonTMs: string[];
   pokemonSelected: string;
   pokemonNames: string[];
+  filteredPokemonNames: Observable<string[]>;
+  pokemonSearchControl = new FormControl();
 
   constructor(private pokemonService: PokemonService) {
     pokemonService.getTmNames((res) => {
@@ -25,6 +29,17 @@ export class PokemonSearcherComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.filteredPokemonNames = this.pokemonSearchControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+  }
+
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.pokemonNames?.filter(option => option.toLowerCase().includes(filterValue)) || [];
   }
 
   updatePokemonDetails(pokemon: string): any {

@@ -4,9 +4,10 @@
     <mat-form-field class="example-full-width">
       <mat-label>Pokemon</mat-label>
       <input type="text" placeholder="enter pokemon name" name="pokemonName"
+             [formControl]="pokemonSearchControl"
              [(ngModel)]="pokemonSelected" matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete">
-        <mat-option *ngFor="let pokemonName of pokemonNames" [value]="pokemonName">
+        <mat-option *ngFor="let pokemonName of filteredPokemonNames | async" [value]="pokemonName">
           {{pokemonName}}
         </mat-option>
       </mat-autocomplete>
@@ -17,6 +18,7 @@
   </button>
 </div>
 
-<span *ngFor="let tmDetails of pokemonTMs">
-  <br><label style="margin: 10px 0 10px 10px">{{ tmDetails }}</label>
-</span>
+<div *ngFor="let tmDetails of pokemonTMs" style="margin: 0 0 0 10px">
+  <br>
+  <label>{{ tmDetails }}</label>
+</div>
