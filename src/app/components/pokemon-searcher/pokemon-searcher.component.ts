@@ -17,6 +17,7 @@ export class PokemonSearcherComponent implements OnInit {
   pokemonNames: string[];
   filteredPokemonNames: Observable<string[]>;
   pokemonSearchControl = new FormControl();
+  typesGraph: any;
 
   constructor(private pokemonService: PokemonService) {
     pokemonService.getTmNames((res) => {
@@ -26,6 +27,7 @@ export class PokemonSearcherComponent implements OnInit {
       this.pokemonToTM = res;
       this.pokemonNames = Object.keys(this.pokemonToTM);
     });
+    this.typesGraph = pokemonService.getTypesGraph();
   }
 
   ngOnInit(): void {
