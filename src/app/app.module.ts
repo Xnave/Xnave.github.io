@@ -11,11 +11,19 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
+import { ElementIconComponent } from './components/element-icon/element-icon.component';
+import { ElementToEffectiveComponent } from './components/element-to-effective/element-to-effective.component';
+import { ElementToWeaknessComponent } from './components/element-to-weakness/element-to-weakness.component';
+import { PokemonEffectsComponent } from './components/pokemon-effects/pokemon-effects.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PokemonSearcherComponent
+    PokemonSearcherComponent,
+    ElementIconComponent,
+    ElementToEffectiveComponent,
+    ElementToWeaknessComponent,
+    PokemonEffectsComponent
   ],
   imports: [
     BrowserModule,

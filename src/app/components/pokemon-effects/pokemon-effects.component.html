@@ -1,0 +1,7 @@
+<div *ngIf="pokemon">
+  <app-element-to-weakness [elementName]="pokemon?.type"></app-element-to-weakness>
+  <br>
+  <app-element-to-effective [elementName]="pokemon?.first_attack_type" [descr]="pokemon?.first_attack_name"></app-element-to-effective>
+  <br>
+  <app-element-to-effective [elementName]="pokemon?.second_attack_type" [descr]="pokemon?.second_attack_name"></app-element-to-effective>
+</div>

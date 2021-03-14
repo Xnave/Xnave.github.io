@@ -98,42 +98,56 @@ export class PokemonService {
     return this.tmNamesEvaluated.subscribe(cb);
   }
 
-  public getPokemonsDetails(): any {
+  public getPokemonsDetails(): PokemonDetails {
     return {
-      Bulbasaur: {
-        type: 'grass',
+      bulbasaur: {
+        type: PokemonTypes.grass,
         first_attack_name: 'Vine Wipe',
-        first_attack_type: 'grass',
+        first_attack_type: PokemonTypes.grass,
         second_attack_name: 'Tackle',
-        second_attack_type: 'normal',
+        second_attack_type: PokemonTypes.normal,
       },
-      Charmander: {
-        type: 'fire',
+      charmander: {
+        type: PokemonTypes.fire,
         first_attack_name: 'Ember',
-        first_attack_type: 'fire',
+        first_attack_type: PokemonTypes.fire,
         second_attack_name: 'Scratch',
-        second_attack_type: 'normal',
+        second_attack_type: PokemonTypes.normal,
       },
-      Weedle: {
-        type: 'bug',
+      weedle: {
+        type: PokemonTypes.bug,
         first_attack_name: 'StringShot',
-        first_attack_type: 'bug',
+        first_attack_type: PokemonTypes.bug,
       },
-      Squirtle: {
-        type: 'bug',
+      squirtle: {
+        type: PokemonTypes.water,
         first_attack_name: 'Bubble',
-        first_attack_type: 'water',
+        first_attack_type: PokemonTypes.water,
         second_attack_name: 'Tackle',
-        second_attack_type: 'normal',
+        second_attack_type: PokemonTypes.normal,
       }
     };
   }
 
-  public getTypesGraph(): any {
+  public getEffectiveAgainstGraph(): {[key: string]: PokemonTypes[]} {
+    const effectiveAgainstGraph = {};
+    const graph = this.getEffectiveGraph();
+    for (const strongElement of Object.keys(graph)) {
+      for (const weakElement of graph[strongElement].superEffective) {
+        if (effectiveAgainstGraph[weakElement] == null) {
+          effectiveAgainstGraph[weakElement] = [];
+        }
+        effectiveAgainstGraph[weakElement].push(strongElement);
+      }
+    }
+    return effectiveAgainstGraph;
+  }
+
+  public getEffectiveGraph(): TypesGraph {
     return {
       normal: {
         superEffective: [],
-        weak: ['rock', 'ghost'],
+        weak: [PokemonTypes.rock, PokemonTypes.ghost],
       },
       grass: {
         superEffective: [PokemonTypes.ground, PokemonTypes.water, PokemonTypes.rock],
@@ -193,6 +207,25 @@ export class PokemonService {
       },
     };
   }
+}
+
+export class TypesGraph {
+  [key: string]: {
+    superEffective: PokemonTypes[],
+    weak: PokemonTypes[]
+  }
+}
+
+export interface PokemonDetail {
+  type: PokemonTypes;
+  first_attack_name: string;
+  first_attack_type: PokemonTypes;
+  second_attack_name?: string;
+  second_attack_type?: PokemonTypes;
+}
+
+export class PokemonDetails {
+  [key: string]: PokemonDetail
 }
 
 export enum PokemonTypes {
