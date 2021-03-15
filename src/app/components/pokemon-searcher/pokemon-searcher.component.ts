@@ -26,10 +26,12 @@ export class PokemonSearcherComponent implements OnInit {
     });
     pokemonService.getTmDataByPokemon((res) => {
       this.pokemonToTM = res;
-      this.pokemonNames = Object.keys(this.pokemonToTM);
     });
     this.typesGraph = pokemonService.getEffectiveGraph();
-    pokemonService.getPokemonsDetails((pokemons) => this.pokemons = pokemons);
+    pokemonService.getPokemonsDetails((pokemons) => {
+      this.pokemons = pokemons;
+      this.pokemonNames = Object.keys(pokemons);
+    });
   }
 
   ngOnInit(): void {
