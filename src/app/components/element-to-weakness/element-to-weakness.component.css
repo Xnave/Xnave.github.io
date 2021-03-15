@@ -4,3 +4,9 @@
   -webkit-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
 }
+
+.avoid-attacks-label {
+  position: relative;
+  right: 100px;
+  top: -20px;
+}

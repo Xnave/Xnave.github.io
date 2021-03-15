@@ -6,8 +6,27 @@
 }
 
 .descr-label {
+  position: absolute;
+  transform: translate(-33%, -20px);
+}
+
+.good-against-label {
   position: fixed;
-  top: -40%;
-  transform: translateX(-20%);
-  width: 100%;
+  top: 100%;
+  right: 0;
+}
+
+.bad-against-label {
+  position: fixed;
+  top: 100%;
+  left: 0;
+}
+
+.attack-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.middle-element {
+  margin: auto;
 }

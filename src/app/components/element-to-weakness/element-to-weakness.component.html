@@ -1,3 +1,6 @@
-<app-element-icon [elementName]="elementName"></app-element-icon>
-<img src="/assets/red_arrow.ico" alt="red arrow back" class="icon-flipped" style="padding: 2px 12px 2px 8px;">
-<app-element-icon [elementName]="strongerElement" *ngFor="let strongerElement of strongerElements"></app-element-icon>
+<div style="display: flex; margin-top: 15px;">
+  <app-element-icon [elementName]="elementName"></app-element-icon>
+  <img src="/assets/red_arrow.ico" alt="red arrow back" class="icon-flipped" style="padding: 2px 12px 2px 8px;">
+  <app-element-icon [elementName]="strongerElement" *ngFor="let strongerElement of strongerElements"></app-element-icon>
+  <label class="avoid-attacks-label">Avoid Attacks</label>
+</div>
