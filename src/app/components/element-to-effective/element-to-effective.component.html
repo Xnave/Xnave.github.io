@@ -1,4 +1,4 @@
 <app-element-icon [elementName]="elementName"></app-element-icon>
 <label *ngIf="descr"> ( {{descr}} ) </label>
-<img src="/assets/green_arrow.ico" alt="green arrow" style="padding: 2px 12px 2px 8px;">
+<img *ngIf="weakerElements.length > 0" src="/assets/green_arrow.ico" alt="green arrow" style="padding: 2px 12px 2px 8px;">
 <app-element-icon [elementName]="weak" *ngFor="let weak of weakerElements"></app-element-icon>
