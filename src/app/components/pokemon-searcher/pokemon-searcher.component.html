@@ -20,8 +20,9 @@
 
 <app-pokemon-effects [pokemon]="detailsOf(pokemonSelected)"></app-pokemon-effects>
 
-<div *ngFor="let tmDetails of pokemonTMs" style="margin: 0 0 0 10px">
-  <br>
-  <label>{{ tmDetails }}</label>
-</div>
-
+<h4 *ngIf="pokemonTMs && pokemonTMs.length > 0" style="margin-top: 45px">Available TMs:</h4>
+<ol>
+  <li *ngFor="let tmDetails of pokemonTMs" style="margin: 0 0 0 10px"> {{ tmDetails }} </li>
+</ol>
+<br>
+<br>
