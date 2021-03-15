@@ -6,8 +6,8 @@
 }
 
 .descr-label {
-  position: absolute;
+  position: fixed;
   top: -40%;
-  left: 20%;
+  transform: translateX(-20%);
   width: 100%;
 }
