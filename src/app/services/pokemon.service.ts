@@ -14,24 +14,38 @@ export class PokemonService {
   private pokemonToTmList;
   pokemonsExcelLoaded = new Subject<any>();
   tmNamesEvaluated = new Subject<any>();
+  pokemonsDetailsLoaded = new Subject<any>();
+  private pokemonDetailsList: PokemonDetails = {};
 
   constructor() {
     this.loadTmExcel();
+    this.loadPokemonsDetailsExcel();
   }
 
   loadTmExcel(): void {
-    axios.get('/assets/pokemon_attacks.xlsm', {
+    this.getExcel('/assets/pokemon_attacks.xlsm').then((res) => {
+      this.file = res.data;
+      this.readExcelFile(this.loadTmRows.bind(this));
+    });
+  }
+
+  loadPokemonsDetailsExcel(): void {
+    this.getExcel('/assets/pokemon_details_list.xlsx').then((res) => {
+      this.file = res.data;
+      this.readExcelFile(this.loadPokemonDetailsRows.bind(this));
+    });
+  }
+
+  private getExcel(path): Promise<any> {
+    return axios.get(path, {
       responseType: 'blob',
       headers: {
         'Content-Type': 'blob',
       }
-    }).then((res) => {
-      this.file = res.data;
-      this.readExcelFile(this.loadRows.bind(this));
     });
   }
 
-  readExcelFile(cb: (raws) => void): any {
+  readExcelFile(cb: (rows) => void): any {
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -49,28 +63,26 @@ export class PokemonService {
     fileReader.readAsArrayBuffer(this.file);
   }
 
-  loadRows(raws: any[]): void {
+  loadTmRows(rows: any[]): void {
     this.tmsList = {};
     this.tmNames = {};
-    for (const tm of Object.keys(raws[0])) {
-      this.tmNames[tm] = raws[0][tm];
+    for (const tm of Object.keys(rows[0])) {
+      this.tmNames[tm] = rows[0][tm];
     }
     this.tmNamesEvaluated.next(this.tmNames);
 
-    raws.forEach((raw, index) => {
+    rows.forEach((row, index) => {
       if (index === 0) { return; } // TM names
-      const tms: string[] = Object.keys(raw);
+      const tms: string[] = Object.keys(row);
       tms.forEach((tm) => {
          // = tm.split(' ').join();
         if (this.tmsList[tm] == null) {
           this.tmsList[tm] = [];
         }
-        this.tmsList[tm].push(raw[tm]);
+        this.tmsList[tm].push(row[tm]);
       });
     });
-    console.log(this.tmsList);
     this.loadTmDataByPokemon();
-    console.log(this.pokemonToTmList);
     this.pokemonsExcelLoaded.next(this.pokemonToTmList);
   }
 
@@ -98,35 +110,27 @@ export class PokemonService {
     return this.tmNamesEvaluated.subscribe(cb);
   }
 
-  public getPokemonsDetails(): PokemonDetails {
+  loadPokemonDetailsRows(rows: PokemonDetailsRow[]): void {
+
+    rows.forEach((row, index) => {
+      this.pokemonDetailsList[row['pokemon name'].toLowerCase()] = this.fromPokemonDetailsRow(row);
+    });
+    console.log(this.pokemonDetailsList);
+    this.pokemonsDetailsLoaded.next(this.pokemonDetailsList);
+  }
+
+  fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
     return {
-      bulbasaur: {
-        type: PokemonTypes.grass,
-        first_attack_name: 'Vine Wipe',
-        first_attack_type: PokemonTypes.grass,
-        second_attack_name: 'Tackle',
-        second_attack_type: PokemonTypes.normal,
-      },
-      charmander: {
-        type: PokemonTypes.fire,
-        first_attack_name: 'Ember',
-        first_attack_type: PokemonTypes.fire,
-        second_attack_name: 'Scratch',
-        second_attack_type: PokemonTypes.normal,
-      },
-      weedle: {
-        type: PokemonTypes.bug,
-        first_attack_name: 'StringShot',
-        first_attack_type: PokemonTypes.bug,
-      },
-      squirtle: {
-        type: PokemonTypes.water,
-        first_attack_name: 'Bubble',
-        first_attack_type: PokemonTypes.water,
-        second_attack_name: 'Tackle',
-        second_attack_type: PokemonTypes.normal,
-      }
+      first_attack_name: row['first attack'],
+      first_attack_type: row['attack type']?.toLowerCase() as PokemonTypes,
+      second_attack_name: row['secand attack'],
+      second_attack_type: row['attack type_1']?.toLowerCase() as PokemonTypes,
+      type: row['pokemon type']?.toLowerCase() as PokemonTypes
     };
+  }
+
+  public getPokemonsDetails(cb: (PokemonDetails) => any): any {
+    return this.pokemonsDetailsLoaded.subscribe(cb);
   }
 
   public getEffectiveAgainstGraph(): {[key: string]: PokemonTypes[]} {
@@ -207,6 +211,16 @@ export class PokemonService {
       },
     };
   }
+}
+
+interface PokemonDetailsRow {
+  'attack type': string; // att 1 type
+  'attack type_1': string; // att 2 type
+  'first attack': string; // att 1 name
+  'pokemon name': string;
+  'pokemon num': string;
+  'pokemon type': string; // att 2 type
+  'secand attack': string; // att 2 name
 }
 
 export class TypesGraph {
