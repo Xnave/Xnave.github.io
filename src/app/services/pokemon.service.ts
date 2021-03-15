@@ -121,8 +121,8 @@ export class PokemonService {
   }
 
   fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
-    function convertType(element: string): PokemonTypes {
-      if (element.toLowerCase() === 'psychic') {
+    function convertType(element?: string): PokemonTypes {
+      if (element?.toLowerCase() === 'psychic') {
         return PokemonTypes.psych;
       }
       return element?.toLowerCase() as PokemonTypes;
