@@ -11,6 +11,7 @@ export class ElementToEffectiveComponent implements OnChanges {
   @Input() descr?: string;
   private typesGraph: TypesGraph;
   weakerElements: PokemonTypes[];
+  strongerElements: PokemonTypes[];
 
   constructor(private pokemonService: PokemonService) {
     this.typesGraph = pokemonService.getEffectiveGraph();
@@ -18,5 +19,6 @@ export class ElementToEffectiveComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.weakerElements = this.typesGraph[changes.elementName.currentValue]?.superEffective || [];
+    this.strongerElements = this.typesGraph[changes.elementName.currentValue]?.weak || [];
   }
 }

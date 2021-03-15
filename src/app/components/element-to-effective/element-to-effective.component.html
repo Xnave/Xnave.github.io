@@ -1,4 +1,8 @@
+<div [style]="{display: 'flex', transform: weakerElements.length > 0 ? 'translateX(-25%)' : 'translateX(-11%)', 'margin-top': '14px'}">
+<app-element-icon [elementName]="stronger" *ngFor="let stronger of strongerElements"></app-element-icon>
+<img src="/assets/red_arrow.ico" alt="red arrow back" class="icon-flipped" style="padding: 2px 12px 2px 8px;">
 <app-element-icon [elementName]="elementName"></app-element-icon>
 <label *ngIf="descr"> ( {{descr}} ) </label>
 <img *ngIf="weakerElements.length > 0" src="/assets/green_arrow.ico" alt="green arrow" style="padding: 2px 12px 2px 8px;">
 <app-element-icon [elementName]="weak" *ngFor="let weak of weakerElements"></app-element-icon>
+</div>
