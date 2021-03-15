@@ -113,19 +113,27 @@ export class PokemonService {
   loadPokemonDetailsRows(rows: PokemonDetailsRow[]): void {
 
     rows.forEach((row, index) => {
-      this.pokemonDetailsList[row['pokemon name'].toLowerCase()] = this.fromPokemonDetailsRow(row);
+      const nameAsIndex = row['pokemon name'].toLowerCase();
+      this.pokemonDetailsList[nameAsIndex] = this.fromPokemonDetailsRow(row);
     });
     console.log(this.pokemonDetailsList);
     this.pokemonsDetailsLoaded.next(this.pokemonDetailsList);
   }
 
   fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
+    function convertType(element: string): PokemonTypes {
+      if (element.toLowerCase() === 'psychic') {
+        return PokemonTypes.psych;
+      }
+      return element?.toLowerCase() as PokemonTypes;
+    }
+
     return {
       first_attack_name: row['first attack'],
-      first_attack_type: row['attack type']?.toLowerCase() as PokemonTypes,
+      first_attack_type: convertType(row['attack type']),
       second_attack_name: row['secand attack'],
-      second_attack_type: row['attack type_1']?.toLowerCase() as PokemonTypes,
-      type: row['pokemon type']?.toLowerCase() as PokemonTypes
+      second_attack_type: convertType(row['attack type_1']),
+      type: convertType(row['pokemon type'])
     };
   }
 
