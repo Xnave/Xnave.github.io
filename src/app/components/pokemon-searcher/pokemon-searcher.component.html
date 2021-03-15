@@ -26,3 +26,19 @@
 </ol>
 <br>
 <br>
+
+<div>
+  <a mat-stroked-button
+     style="position: relative; left: -20%; text-transform: capitalize;"
+     *ngIf="!!prevPokemonForm(pokemonSelected)"
+     (click)="pokemonSearchControl.setValue(prevPokemonForm(pokemonSelected))" >
+    ↓{{prevPokemonForm(pokemonSelected)}}
+  </a>
+
+  <a mat-stroked-button
+     style="position: relative; right: -20%; text-transform: capitalize;"
+     *ngIf="detailsOf(pokemonSelected)?.evolution"
+     (click)="pokemonSearchControl.setValue(detailsOf(pokemonSelected).evolution)" >
+    {{detailsOf(pokemonSelected)?.evolution}}↑
+  </a>
+</div>

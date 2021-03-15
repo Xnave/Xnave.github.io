@@ -70,4 +70,8 @@ export class PokemonSearcherComponent implements OnInit {
   elementOf(pokemonSelected: string): PokemonTypes {
     return this.pokemons[pokemonSelected]?.type;
   }
+
+  prevPokemonForm(pokemonSelected: string): string {
+    return this.detailsOf(pokemonSelected)?.prevForm;
+  }
 }

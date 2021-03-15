@@ -117,6 +117,12 @@ export class PokemonService {
       this.pokemonDetailsList[nameAsIndex] = this.fromPokemonDetailsRow(row);
     });
     console.log(this.pokemonDetailsList);
+    for (const pokemon of Object.keys(this.pokemonDetailsList)) {
+      const evolution = this.pokemonDetailsList[pokemon].evolution;
+      if (evolution) {
+        this.pokemonDetailsList[evolution].prevForm = pokemon;
+      }
+    }
     this.pokemonsDetailsLoaded.next(this.pokemonDetailsList);
   }
 
@@ -133,7 +139,8 @@ export class PokemonService {
       first_attack_type: convertType(row['attack type']),
       second_attack_name: row['secand attack'],
       second_attack_type: convertType(row['attack type_1']),
-      type: convertType(row['pokemon type'])
+      type: convertType(row['pokemon type']),
+      evolution: row.evolve?.toLowerCase()
     };
   }
 
@@ -229,6 +236,7 @@ interface PokemonDetailsRow {
   'pokemon num': string;
   'pokemon type': string; // att 2 type
   'secand attack': string; // att 2 name
+  'evolve': string;
 }
 
 export class TypesGraph {
@@ -244,6 +252,8 @@ export interface PokemonDetail {
   first_attack_type: PokemonTypes;
   second_attack_name?: string;
   second_attack_type?: PokemonTypes;
+  evolution?: string;
+  prevForm?: string;
 }
 
 export class PokemonDetails {
