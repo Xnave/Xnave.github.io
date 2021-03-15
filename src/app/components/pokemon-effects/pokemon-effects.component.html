@@ -3,9 +3,11 @@
   <br>
   <app-element-to-effective *ngIf="pokemon?.first_attack_name"
                             [elementName]="pokemon?.first_attack_type"
-                            [descr]="pokemon?.first_attack_name"></app-element-to-effective>
+                            [descr]="pokemon?.first_attack_name"
+                            class="row-item"></app-element-to-effective>
   <br>
   <app-element-to-effective *ngIf="pokemon?.second_attack_name"
                             [elementName]="pokemon?.second_attack_type"
-                            [descr]="pokemon?.second_attack_name"></app-element-to-effective>
+                            [descr]="pokemon?.second_attack_name"
+                            class="row-item"></app-element-to-effective>
 </div>
