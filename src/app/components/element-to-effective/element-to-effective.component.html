@@ -1,18 +1,18 @@
-<div [style]="{display: 'flex', transform: strongerElements.length >0 ?'translateX(-' + 40* (strongerElements.length-1) + 'px)' : '', 'margin-top': '14px'}">
-  <span *ngIf="strongerElements.length > 0">
-    <app-element-icon [elementName]="stronger" *ngFor="let stronger of strongerElements"></app-element-icon>
+<div [style]="{display: '-webkit-inline-box', transform: computeTranslate(), 'margin-top': '14px'}">
+  <div *ngIf="strongerElements.length > 0" style="white-space: nowrap;" class="element-icons-container">
+    <app-element-icon [elementName]="stronger" *ngFor="let stronger of strongerElements" class="element-icon"></app-element-icon>
     <img src="/assets/red_arrow.ico" alt="red arrow back" class="icon-flipped" style="padding: 2px 12px 2px 8px;">
     <label class="bad-against-label">Bad Against</label>
-  </span>
+  </div>
 
-  <span class="attack-container">
+  <div class="attack-container">
     <app-element-icon [elementName]="elementName" class="middle-element"></app-element-icon>
     <label *ngIf="descr" class="descr-label"> ( {{descr}} ) </label>
-  </span>
+  </div>
 
-  <span *ngIf="weakerElements.length > 0">
+  <div *ngIf="weakerElements.length > 0" style="white-space: nowrap;" class="element-icons-container">
     <img src="/assets/green_arrow.ico" alt="green arrow" style="padding: 2px 12px 2px 8px;">
-    <app-element-icon [elementName]="weak" *ngFor="let weak of weakerElements"></app-element-icon>
+    <app-element-icon [elementName]="weak" *ngFor="let weak of weakerElements" class="element-icon"></app-element-icon>
     <label class="good-against-label">Good Against</label>
-  </span>
+  </div>
 </div>

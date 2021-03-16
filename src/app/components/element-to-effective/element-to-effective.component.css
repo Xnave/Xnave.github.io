@@ -31,3 +31,13 @@
 .middle-element {
   margin: auto;
 }
+
+.element-icons-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.element-icon {
+  max-width: 25px;
+}
+

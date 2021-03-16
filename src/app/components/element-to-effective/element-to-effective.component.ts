@@ -21,4 +21,13 @@ export class ElementToEffectiveComponent implements OnChanges {
     this.weakerElements = this.typesGraph[changes.elementName.currentValue]?.superEffective || [];
     this.strongerElements = this.typesGraph[changes.elementName.currentValue]?.weak || [];
   }
+
+  computeTranslate(): string {
+    if (this.strongerElements.length > 0) {
+      let translate = 25 * (this.strongerElements.length - 1);
+      translate = translate > 90 ? 90 : translate;
+      return 'translateX(-' + translate + 'px)';
+    }
+    return '';
+  }
 }
