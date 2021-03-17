@@ -34,7 +34,8 @@
      (click)="pokemonSearchControl.setValue(prevPokemonForm(pokemonSelected))" >
     ↓{{prevPokemonForm(pokemonSelected)}}
   </a>
-
+<button *ngIf="!isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="saveSelected()">Save</button>
+<button *ngIf="isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="removeSelected()">Remove</button>
   <a mat-stroked-button
      style="position: relative; right: -20%; text-transform: capitalize;"
      *ngIf="detailsOf(pokemonSelected)?.evolution"

@@ -3,6 +3,7 @@ import {PokemonDetail, PokemonDetails, PokemonService, PokemonTypes} from '../..
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {UserDataService} from '../../services/user-data.service';
 
 @Component({
   selector: 'app-pokemon-searcher',
@@ -19,8 +20,10 @@ export class PokemonSearcherComponent implements OnInit {
   pokemonSearchControl = new FormControl();
   typesGraph: any;
   private pokemons: PokemonDetails;
+  userPokemons: string[];
 
-  constructor(private pokemonService: PokemonService) {
+  constructor(private pokemonService: PokemonService,
+              private userDataService: UserDataService) {
     pokemonService.getTmNames((res) => {
       this.tmNames = res;
     });
@@ -32,6 +35,7 @@ export class PokemonSearcherComponent implements OnInit {
       this.pokemons = pokemons;
       this.pokemonNames = Object.keys(pokemons);
     });
+    this.userPokemons = this.userDataService.getUserPokemons();
   }
 
   ngOnInit(): void {
@@ -73,5 +77,19 @@ export class PokemonSearcherComponent implements OnInit {
 
   prevPokemonForm(pokemonSelected: string): string {
     return this.detailsOf(pokemonSelected)?.prevForm;
+  }
+
+  saveSelected(): void {
+    this.userDataService.saveUserPokemon(this.pokemonSelected);
+    this.userPokemons = this.userDataService.getUserPokemons();
+  }
+
+  removeSelected(): void {
+    this.userDataService.removeUserPokemon(this.pokemonSelected);
+    this.userPokemons = this.userDataService.getUserPokemons();
+  }
+
+  isUserPokemon(pokemonSelected: string): boolean {
+    return this.userPokemons.includes(pokemonSelected);
   }
 }
