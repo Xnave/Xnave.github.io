@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PokemonDetail, PokemonDetails, PokemonService, PokemonTypes} from '../../services/pokemon.service';
+import {PokemonDetail, PokemonDetails, PokemonService, PokemonTypes, TmDetails} from '../../services/pokemon.service';
 import {FormControl} from '@angular/forms';
 import {map, startWith} from 'rxjs/operators';
 import {Observable} from 'rxjs';
@@ -13,7 +13,8 @@ import {UserDataService} from '../../services/user-data.service';
 export class PokemonSearcherComponent implements OnInit {
   pokemonToTM = [];
   tmNames;
-  pokemonTMs: string[];
+  pokemonTMs: TmDetails[];
+  tmDetails: {[key: string]: TmDetails};
   pokemonSelected: string;
   pokemonNames: string[];
   filteredPokemonNames: Observable<string[]>;
@@ -34,6 +35,9 @@ export class PokemonSearcherComponent implements OnInit {
     pokemonService.getPokemonsDetails((pokemons) => {
       this.pokemons = pokemons;
       this.pokemonNames = Object.keys(pokemons);
+    });
+    pokemonService.getTmDetails((tmDetails) => {
+      this.tmDetails = tmDetails;
     });
     this.userPokemons = this.userDataService.getUserPokemons();
   }
@@ -60,11 +64,13 @@ export class PokemonSearcherComponent implements OnInit {
   }
 
   updatePokemonTms(pokemon: string): any {
-    this.pokemonTMs = (this.pokemonToTM[pokemon.toLowerCase()] as any[]).map(this.formatTM.bind(this));
+    this.pokemonTMs = (this.pokemonToTM[pokemon.toLowerCase()] as any[]).map(name => {
+      return this.tmDetails[name];
+    });
   }
 
   private formatTM(tm: string): string {
-    return tm.toUpperCase().split(' ').join('-').concat(' ( ', this.tmNames[tm], ' )');
+    return tm?.toUpperCase().split(' ').join('-');
   }
 
   detailsOf(pokemonSelected: string): PokemonDetail | undefined {

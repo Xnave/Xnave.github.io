@@ -11,10 +11,12 @@ export class PokemonService {
   file: File;
   private tmsList;
   private tmNames;
+  private tmDetailsList: {[key: string]: TmDetails};
   private pokemonToTmList;
   pokemonsExcelLoaded = new Subject<any>();
   tmNamesEvaluated = new Subject<any>();
   pokemonsDetailsLoaded = new Subject<any>();
+  tmDetailsLoaded = new Subject<any>();
   private pokemonDetailsList: PokemonDetails = {};
 
   constructor() {
@@ -25,7 +27,8 @@ export class PokemonService {
   loadTmExcel(): void {
     this.getExcel('/assets/pokemon_attacks.xlsm').then((res) => {
       this.file = res.data;
-      this.readExcelFile(this.loadTmRows.bind(this));
+      this.readExcelFile(this.loadTmRows.bind(this), 0);
+      this.readExcelFile(this.loadTmDetailsRows.bind(this), 1);
     });
   }
 
@@ -45,7 +48,7 @@ export class PokemonService {
     });
   }
 
-  readExcelFile(cb: (rows) => void): any {
+  readExcelFile(cb: (rows) => void, sheetNum = 0): any {
     const fileReader = new FileReader();
     fileReader.onload = (e) => {
       this.arrayBuffer = fileReader.result;
@@ -56,7 +59,7 @@ export class PokemonService {
       }
       const bstr = arr.join('');
       const workbook = XLSX.read(bstr, {type: 'binary'});
-      const firstSheetName = workbook.SheetNames[0];
+      const firstSheetName = workbook.SheetNames[sheetNum];
       const worksheet = workbook.Sheets[firstSheetName];
       cb(XLSX.utils.sheet_to_json(worksheet, {raw: true}));
     };
@@ -84,6 +87,26 @@ export class PokemonService {
     });
     this.loadTmDataByPokemon();
     this.pokemonsExcelLoaded.next(this.pokemonToTmList);
+  }
+
+  convertTmDetails(row: TmDetailsRow): TmDetails {
+    return {
+      descr: row.attack,
+      type: this.convertType(row.type),
+      name: row.number
+    };
+  }
+
+  loadTmDetailsRows(rows: any[]): void {
+    this.tmDetailsList = {};
+
+    rows.forEach((row: TmDetailsRow, index) => {
+      if (Object.keys(row).includes('name')) {
+        this.tmDetailsList[row.number.toLowerCase()] = this.convertTmDetails(row);
+      }
+    });
+    console.log(this.tmDetailsList);
+    this.tmDetailsLoaded.next(this.tmDetailsList);
   }
 
   public loadTmDataByPokemon(): any {
@@ -116,7 +139,6 @@ export class PokemonService {
       const nameAsIndex = row['pokemon name'].toLowerCase();
       this.pokemonDetailsList[nameAsIndex] = this.fromPokemonDetailsRow(row);
     });
-    console.log(this.pokemonDetailsList);
     for (const pokemon of Object.keys(this.pokemonDetailsList)) {
       const evolution = this.pokemonDetailsList[pokemon].evolution;
       if (evolution) {
@@ -126,26 +148,31 @@ export class PokemonService {
     this.pokemonsDetailsLoaded.next(this.pokemonDetailsList);
   }
 
-  fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
-    function convertType(element?: string): PokemonTypes {
-      if (element?.toLowerCase() === 'psychic') {
-        return PokemonTypes.psych;
-      }
-      return element?.toLowerCase() as PokemonTypes;
-    }
 
+  private convertType(element?: string): PokemonTypes {
+    if (element?.toLowerCase() === 'psychic') {
+      return PokemonTypes.psych;
+    }
+    return element?.toLowerCase() as PokemonTypes;
+  }
+
+  fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
     return {
       first_attack_name: row['first attack'],
-      first_attack_type: convertType(row['attack type']),
+      first_attack_type: this.convertType(row['attack type']),
       second_attack_name: row['secand attack'],
-      second_attack_type: convertType(row['attack type_1']),
-      type: convertType(row['pokemon type']),
+      second_attack_type: this.convertType(row['attack type_1']),
+      type: this.convertType(row['pokemon type']),
       evolution: row.evolve?.toLowerCase()
     };
   }
 
   public getPokemonsDetails(cb: (PokemonDetails) => any): any {
     return this.pokemonsDetailsLoaded.subscribe(cb);
+  }
+
+  public getTmDetails(cb: (PokemonDetails) => any): any {
+    return this.tmDetailsLoaded.subscribe(cb);
   }
 
   public getEffectiveAgainstGraph(): {[key: string]: PokemonTypes[]} {
@@ -237,6 +264,19 @@ interface PokemonDetailsRow {
   'pokemon type': string; // att 2 type
   'secand attack': string; // att 2 name
   'evolve': string;
+}
+
+interface TmDetailsRow {
+  'attack': string; // atk details
+  'name': string; // description
+  'number': string; // tm name
+  'type': string;
+}
+
+export interface TmDetails {
+  'descr': string;
+  'type': string;
+  'name': string;
 }
 
 export class TypesGraph {
