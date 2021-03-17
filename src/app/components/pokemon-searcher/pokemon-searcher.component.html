@@ -41,7 +41,7 @@
     ↓{{prevPokemonForm(pokemonSelected)}}
   </a>
 
-  <button *ngIf="!isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="saveSelected()">Save</button>
+  <button *ngIf="detailsOf(pokemonSelected) && !isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="saveSelected()">Save</button>
   <button *ngIf="isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="removeSelected()">Remove</button>
 
   <a mat-stroked-button
