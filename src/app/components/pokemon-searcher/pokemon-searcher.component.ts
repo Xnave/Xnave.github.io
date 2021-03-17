@@ -46,7 +46,7 @@ export class PokemonSearcherComponent implements OnInit {
     this.filteredPokemonNames = this.pokemonSearchControl.valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value))
+        map(value => this.filterPokemonNames(value))
       );
     this.pokemonSearchControl.valueChanges.subscribe((p) => {
       if (this.pokemonToTM[p && p.toLowerCase()]) {
@@ -57,8 +57,8 @@ export class PokemonSearcherComponent implements OnInit {
     });
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  private filterPokemonNames(value: string): string[] {
+    const filterValue = value?.toLowerCase();
 
     return this.pokemonNames?.filter(option => option.toLowerCase().includes(filterValue)) || [];
   }
