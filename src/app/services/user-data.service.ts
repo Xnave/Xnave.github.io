@@ -32,7 +32,7 @@ export class UserDataService {
     }
     const pokemonIdx = pokemons.indexOf(pokemon);
     if (pokemonIdx > -1) {
-      delete pokemons[pokemonIdx];
+      pokemons.splice(pokemonIdx, 1);
       localStorage.setItem(userPokemonsKey, JSON.stringify(pokemons));
     }
   }

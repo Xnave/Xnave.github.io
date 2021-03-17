@@ -1,3 +1,9 @@
+<div style="transform: translateX(-20%);">
+  <button *ngFor="let userPokemon of userPokemons"
+          mat-stroked-button color="primary" style="margin: 3px 5px 3px 0;"
+          (click)="pokemonSelected = userPokemon">{{ userPokemon }}</button>
+</div>
+
 <p>The Great TM Pokedex </p>
 <div style="display: flex; min-width: 400px">
   <form>
@@ -34,8 +40,10 @@
      (click)="pokemonSearchControl.setValue(prevPokemonForm(pokemonSelected))" >
     ↓{{prevPokemonForm(pokemonSelected)}}
   </a>
-<button *ngIf="!isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="saveSelected()">Save</button>
-<button *ngIf="isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="removeSelected()">Remove</button>
+
+  <button *ngIf="!isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="saveSelected()">Save</button>
+  <button *ngIf="isUserPokemon(pokemonSelected)" mat-flat-button color="primary" (click)="removeSelected()">Remove</button>
+
   <a mat-stroked-button
      style="position: relative; right: -20%; text-transform: capitalize;"
      *ngIf="detailsOf(pokemonSelected)?.evolution"
