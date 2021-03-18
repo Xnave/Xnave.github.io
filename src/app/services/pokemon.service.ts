@@ -158,6 +158,7 @@ export class PokemonService {
 
   fromPokemonDetailsRow(row: PokemonDetailsRow): PokemonDetail {
     return {
+      number: row['pokemon num'],
       first_attack_name: row['first attack'],
       first_attack_type: this.convertType(row['attack type']),
       second_attack_name: row['secand attack'],
@@ -287,6 +288,7 @@ export class TypesGraph {
 }
 
 export interface PokemonDetail {
+  number: string;
   type: PokemonTypes;
   first_attack_name: string;
   first_attack_type: PokemonTypes;

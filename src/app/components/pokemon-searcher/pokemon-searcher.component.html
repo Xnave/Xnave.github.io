@@ -14,7 +14,10 @@
              [(ngModel)]="pokemonSelected" matInput [matAutocomplete]="auto">
       <mat-autocomplete #auto="matAutocomplete">
         <mat-option *ngFor="let pokemonName of filteredPokemonNames | async" [value]="pokemonName">
-          {{pokemonName}}
+          <span>
+            {{pokemonName}}
+            <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + detailsOf(pokemonName).number + '.png'" [alt]="pokemonName" class="pokemon-item-img">
+          </span>
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>

@@ -2,3 +2,8 @@
   position: relative;
   top: 15px;
 }
+
+.pokemon-item-img {
+  position: absolute;
+  transform: translateY(-25%);
+}
