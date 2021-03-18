@@ -7,3 +7,9 @@
   position: absolute;
   transform: translateY(-25%);
 }
+
+.user-pokemon {
+  display: flex;
+  flex-direction: column-reverse;
+}
+

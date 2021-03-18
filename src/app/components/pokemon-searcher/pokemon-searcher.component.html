@@ -1,7 +1,11 @@
-<div style="transform: translateX(-20%);">
+<div style="transform: translateX(-22%); width: 80%">
   <button *ngFor="let userPokemon of userPokemons"
           mat-stroked-button color="primary" style="margin: 3px 5px 3px 0;"
-          (click)="pokemonSelected = userPokemon">{{ userPokemon }}</button>
+          (click)="pokemonSelected = userPokemon">
+          <span class="user-pokemon">
+            <app-pokemon-img [pokemons]="pokemons" [pokemonName]="userPokemon" small="true"></app-pokemon-img>
+          </span>
+  </button>
 </div>
 
 <p>The Great TM Pokedex </p>
@@ -16,7 +20,7 @@
         <mat-option *ngFor="let pokemonName of filteredPokemonNames | async" [value]="pokemonName">
           <span>
             {{pokemonName}}
-            <img [src]="'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/' + detailsOf(pokemonName).number + '.png'" [alt]="pokemonName" class="pokemon-item-img">
+            <app-pokemon-img [pokemons]="pokemons" [pokemonName]="pokemonName" class="pokemon-item-img"></app-pokemon-img>
           </span>
         </mat-option>
       </mat-autocomplete>

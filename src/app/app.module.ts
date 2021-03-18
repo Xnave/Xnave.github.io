@@ -15,6 +15,7 @@ import { ElementIconComponent } from './components/element-icon/element-icon.com
 import { ElementToEffectiveComponent } from './components/element-to-effective/element-to-effective.component';
 import { ElementToWeaknessComponent } from './components/element-to-weakness/element-to-weakness.component';
 import { PokemonEffectsComponent } from './components/pokemon-effects/pokemon-effects.component';
+import { PokemonImgComponent } from './components/pokemon-img/pokemon-img.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { PokemonEffectsComponent } from './components/pokemon-effects/pokemon-ef
     ElementIconComponent,
     ElementToEffectiveComponent,
     ElementToWeaknessComponent,
-    PokemonEffectsComponent
+    PokemonEffectsComponent,
+    PokemonImgComponent
   ],
   imports: [
     BrowserModule,
